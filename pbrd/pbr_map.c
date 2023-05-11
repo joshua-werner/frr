@@ -3,6 +3,9 @@
  * PBR-map Code
  * Copyright (C) 2018 Cumulus Networks, Inc.
  *               Donald Sharp
+ * Portions:
+ *     Copyright (c) 2021 The MITRE Corporation. All Rights Reserved.
+ *          Approved for Public Release; Distribution Unlimited 21-1402
  */
 #include <zebra.h>
 
@@ -531,6 +534,9 @@ struct pbr_map_sequence *pbrms_get(const char *name, uint32_t seqno)
 		pbrms->action_pcp = 0;
 
 		pbrms->action_queue_id = PBR_MAP_UNDEFINED_QUEUE_ID;
+
+        pbrms->src_prt = 0;
+        pbrms->dst_prt = 0;
 
 		pbrms->reason =
 			PBR_MAP_INVALID_EMPTY |
