@@ -2,6 +2,9 @@
 /*
  * Zebra dataplane layer.
  * Copyright (c) 2018 Volta Networks, Inc.
+ * Portions:
+ *     Copyright (c) 2021 The MITRE Corporation. All Rights Reserved.
+ *          Approved for Public Release; Distribution Unlimited 21-1402
  */
 
 #ifdef HAVE_CONFIG_H
@@ -265,6 +268,9 @@ struct dplane_ctx_rule {
 	uint16_t action_vlan_flags;
 
 	uint32_t action_queue_id;
+
+    uint32_t filter_src_port;
+    uint32_t filter_dst_port;
 
 	char ifname[INTERFACE_NAMSIZ + 1];
 	struct ethaddr smac;
@@ -2392,6 +2398,34 @@ uint32_t dplane_ctx_rule_get_old_fwmark(const struct zebra_dplane_ctx *ctx)
 	return ctx->u.rule.old.fwmark;
 }
 
+uint16_t dplane_ctx_rule_get_src_port(const struct zebra_dplane_ctx *ctx)
+{
+	DPLANE_CTX_VALID(ctx);
+
+	return ctx->u.rule.new.filter_src_port;
+}
+
+uint16_t dplane_ctx_rule_get_old_src_port(const struct zebra_dplane_ctx *ctx)
+{
+	DPLANE_CTX_VALID(ctx);
+
+	return ctx->u.rule.old.filter_src_port;
+}
+
+uint16_t dplane_ctx_rule_get_dst_port(const struct zebra_dplane_ctx *ctx)
+{
+	DPLANE_CTX_VALID(ctx);
+
+	return ctx->u.rule.new.filter_dst_port;
+}
+
+uint16_t dplane_ctx_rule_get_old_dst_port(const struct zebra_dplane_ctx *ctx)
+{
+	DPLANE_CTX_VALID(ctx);
+
+	return ctx->u.rule.old.filter_dst_port;
+}
+
 uint8_t dplane_ctx_rule_get_ipproto(const struct zebra_dplane_ctx *ctx)
 {
 	DPLANE_CTX_VALID(ctx);
@@ -3425,13 +3459,14 @@ static void dplane_ctx_rule_init_single(struct dplane_ctx_rule *dplane_rule,
 	dplane_rule->dst_port = rule->rule.filter.dst_port;
 	prefix_copy(&(dplane_rule->dst_ip), &rule->rule.filter.dst_ip);
 	prefix_copy(&(dplane_rule->src_ip), &rule->rule.filter.src_ip);
-
 	dplane_rule->action_pcp = rule->rule.action.pcp;
 	dplane_rule->action_vlan_flags = rule->rule.action.vlan_flags;
 	dplane_rule->action_vlan_id = rule->rule.action.vlan_id;
 	dplane_rule->action_queue_id = rule->rule.action.queue_id;
-
+	dplane_rule->filter_src_port = rule->rule.filter.src_port;
+	dplane_rule->filter_dst_port = rule->rule.filter.dst_port;
 	strlcpy(dplane_rule->ifname, rule->ifname, INTERFACE_NAMSIZ);
+    
 	dplane_rule->dp_flow_ptr = rule->action.dp_flow_ptr;
 	n = rule->action.neigh;
 	if (n && (n->flags & ZEBRA_NEIGH_ENT_ACTIVE)) {

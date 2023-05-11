@@ -3,6 +3,9 @@
  * PBR - vty code
  * Copyright (C) 2018 Cumulus Networks, Inc.
  *               Donald Sharp
+ * Portions:
+ *     Copyright (c) 2021 The MITRE Corporation. All Rights Reserved.
+ *          Approved for Public Release; Distribution Unlimited 21-1402
  */
 #include <zebra.h>
 
@@ -913,7 +916,11 @@ static void vty_show_pbrms(struct vty *vty,
 		vty_out(vty, "        Strip VLAN ID\n");
 	if (pbrms->action_pcp)
 		vty_out(vty, "        Set PCP %u\n", pbrms->action_pcp);
-
+    
+	if (pbrms->src_prt)
+		vty_out(vty, "        Match Src port %u\n", pbrms->src_prt);
+	if (pbrms->dst_prt)
+		vty_out(vty, "        Match Dst port %u\n", pbrms->dst_prt);
 
 	if (pbrms->nhgrp_name) {
 		vty_out(vty, "        Nexthop-Group: %s\n", pbrms->nhgrp_name);

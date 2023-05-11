@@ -2,6 +2,9 @@
 /*
  * Zebra dataplane layer api interfaces.
  * Copyright (c) 2018 Volta Networks, Inc.
+ * Portions:
+ *     Copyright (c) 2021 The MITRE Corporation. All Rights Reserved.
+ *          Approved for Public Release; Distribution Unlimited 21-1402
  */
 
 #ifndef _ZEBRA_DPLANE_H
@@ -589,6 +592,10 @@ uint8_t dplane_ctx_rule_get_dsfield(const struct zebra_dplane_ctx *ctx);
 uint8_t dplane_ctx_rule_get_old_dsfield(const struct zebra_dplane_ctx *ctx);
 uint8_t dplane_ctx_rule_get_ipproto(const struct zebra_dplane_ctx *ctx);
 uint8_t dplane_ctx_rule_get_old_ipproto(const struct zebra_dplane_ctx *ctx);
+uint16_t dplane_ctx_rule_get_old_src_port(const struct zebra_dplane_ctx *ctx);
+uint16_t dplane_ctx_rule_get_src_port(const struct zebra_dplane_ctx *ctx);
+uint16_t dplane_ctx_rule_get_old_dst_port(const struct zebra_dplane_ctx *ctx);
+uint16_t dplane_ctx_rule_get_dst_port(const struct zebra_dplane_ctx *ctx);
 uint16_t dplane_ctx_rule_get_src_port(const struct zebra_dplane_ctx *ctx);
 uint16_t dplane_ctx_rule_get_old_src_port(const struct zebra_dplane_ctx *ctx);
 uint16_t dplane_ctx_rule_get_dst_port(const struct zebra_dplane_ctx *ctx);
